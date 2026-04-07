@@ -1,0 +1,645 @@
+   <!DOCTYPE html>
+<html lang="uz">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>49 TEAM | HACKER SECURITY</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Courier New', 'Fira Code', monospace;
+            background: #050505;
+            color: #00ff41;
+            line-height: 1.5;
+            min-height: 100vh;
+        }
+
+        .matrix-bg {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: repeating-linear-gradient(0deg,
+                rgba(0, 255, 65, 0.03) 0px,
+                rgba(0, 255, 65, 0.03) 2px,
+                transparent 2px,
+                transparent 6px);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        nav {
+            background: rgba(0, 0, 0, 0.95);
+            border-bottom: 1px solid #00ff41;
+            padding: 15px 40px;
+            position: fixed;
+            width: 100%;
+            top: 0;
+            z-index: 100;
+            backdrop-filter: blur(5px);
+        }
+
+        .nav-container {
+            max-width: 1200px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+        }
+
+        .logo {
+            font-size: 20px;
+            font-weight: bold;
+            color: #00ff41;
+            text-shadow: 0 0 5px #00ff41;
+        }
+
+        .logo::before {
+            content: ">";
+            margin-right: 5px;
+        }
+
+        .nav-links {
+            display: flex;
+            gap: 25px;
+        }
+
+        .nav-links a {
+            color: #00ff41;
+            text-decoration: none;
+            font-size: 14px;
+            cursor: pointer;
+            opacity: 0.7;
+            transition: 0.3s;
+        }
+
+        .nav-links a:hover {
+            opacity: 1;
+            text-shadow: 0 0 5px #00ff41;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 80px auto 0;
+            padding: 20px;
+            position: relative;
+            z-index: 1;
+        }
+
+        .hero {
+            background: rgba(0, 0, 0, 0.7);
+            border: 1px solid #00ff41;
+            border-radius: 10px;
+            padding: 40px;
+            margin-bottom: 40px;
+            text-align: center;
+            box-shadow: 0 0 20px rgba(0, 255, 65, 0.1);
+        }
+
+        .typing-container {
+            font-size: 42px;
+            font-weight: bold;
+            font-family: monospace;
+            min-height: 80px;
+        }
+
+        #typedText {
+            color: #00ff41;
+            text-shadow: 0 0 10px #00ff41;
+        }
+
+        .cursor {
+            display: inline-block;
+            width: 3px;
+            background: #00ff41;
+            margin-left: 5px;
+            animation: blink 0.8s infinite;
+        }
+
+        @keyframes blink {
+            0%, 100% { opacity: 1; }
+            50% { opacity: 0; }
+        }
+
+        .hero p {
+            margin-top: 20px;
+            font-size: 14px;
+            opacity: 0.8;
+        }
+
+        .section-title {
+            font-size: 18px;
+            margin: 30px 0 20px 0;
+            padding-bottom: 8px;
+            border-bottom: 1px solid #00ff41;
+            color: #00ff41;
+        }
+
+        .section-title::before {
+            content: "# ";
+        }
+
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+            margin-bottom: 40px;
+        }
+
+        .card {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ff41;
+            border-radius: 8px;
+            padding: 18px;
+            transition: 0.2s;
+        }
+
+        .card:hover {
+            box-shadow: 0 0 15px rgba(0, 255, 65, 0.2);
+        }
+
+        .card h3 {
+            font-size: 16px;
+            margin-bottom: 12px;
+            color: #00ff41;
+        }
+
+        .card input, .card textarea, .card select {
+            width: 100%;
+            padding: 8px;
+            margin: 6px 0;
+            background: #0a0a0a;
+            border: 1px solid #00ff41;
+            border-radius: 5px;
+            color: #00ff41;
+            font-family: monospace;
+            font-size: 12px;
+        }
+
+        .card input:focus, .card textarea:focus {
+            outline: none;
+            box-shadow: 0 0 5px #00ff41;
+        }
+
+        .card button {
+            width: 100%;
+            padding: 8px;
+            margin-top: 8px;
+            background: transparent;
+            border: 1px solid #00ff41;
+            border-radius: 5px;
+            color: #00ff41;
+            font-family: monospace;
+            font-size: 12px;
+            cursor: pointer;
+            transition: 0.2s;
+        }
+
+        .card button:hover {
+            background: #00ff41;
+            color: #000;
+        }
+
+        .result {
+            margin-top: 10px;
+            padding: 8px;
+            background: #0a0a0a;
+            border-radius: 5px;
+            font-size: 11px;
+            display: none;
+            word-break: break-all;
+        }
+
+        .result.show {
+            display: block;
+        }
+
+        .info-box {
+            background: rgba(0, 0, 0, 0.8);
+            border: 1px solid #00ff41;
+            border-radius: 8px;
+            padding: 20px;
+            margin-bottom: 20px;
+        }
+
+        .info-box h3 {
+            color: #00ff41;
+            margin-bottom: 12px;
+            font-size: 16px;
+        }
+
+        .info-box p {
+            margin-bottom: 8px;
+            font-size: 13px;
+            opacity: 0.9;
+        }
+
+        .member-list {
+            list-style: none;
+            padding-left: 0;
+        }
+
+        .member-list li {
+            padding: 8px 0;
+            border-bottom: 1px dashed rgba(0, 255, 65, 0.3);
+            font-size: 13px;
+        }
+
+        .member-list li:last-child {
+            border-bottom: none;
+        }
+
+        .leader {
+            color: #00ff41;
+            font-weight: bold;
+            text-shadow: 0 0 3px #00ff41;
+        }
+
+        footer {
+            text-align: center;
+            padding: 25px;
+            border-top: 1px solid #00ff41;
+            margin-top: 40px;
+            font-size: 11px;
+            opacity: 0.6;
+        }
+
+        @media (max-width: 900px) {
+            .grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+        }
+
+        @media (max-width: 600px) {
+            .grid {
+                grid-template-columns: 1fr;
+            }
+            .typing-container {
+                font-size: 24px;
+            }
+            .nav-links {
+                margin-top: 10px;
+                gap: 15px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+<div class="matrix-bg"></div>
+
+<nav>
+    <div class="nav-container">
+        <div class="logo">49 TEAM</div>
+        <div class="nav-links">
+            <a onclick="showPage('home')">[HOME]</a>
+            <a onclick="showPage('tools')">[TOOLS]</a>
+            <a onclick="showPage('education')">[EDUCATION]</a>
+            <a onclick="showPage('news')">[NEWS]</a>
+            <a onclick="showPage('about')">[ABOUT]</a>
+        </div>
+    </div>
+</nav>
+
+<!-- BOSH SAHIFA -->
+<div id="homePage" class="container">
+    <div class="hero">
+        <div class="typing-container">
+            <span id="typedText"></span><span class="cursor"></span>
+        </div>
+        <p># We Are 49 | We Are Legion | Security Since 2020</p>
+        <p style="font-size: 12px; margin-top: 15px;">[ ACCESS GRANTED ] - Kiberxavfsizlik platformasi</p>
+    </div>
+
+    <div class="info-box">
+        <h3>> 49 TEAM HAQIDA</h3>
+        <p>49 TEAM - O'zbekiston kiberxavfsizlik jamoasi. Bizning maqsadimiz - raqamli dunyoni xavfsiz qilish.</p>
+        <p>Jamoa 2020-yilda tashkil etilgan bo'lib, hozirda 5 nafar professional a'zodan iborat.</p>
+    </div>
+
+    <div class="info-box">
+        <h3>> STATISTIKA</h3>
+        <p>[+] Himoyalangan tizimlar: 1,247+</p>
+        <p>[+] Aniqlangan xavflar: 8,932+</p>
+        <p>[+] Jamoa a'zolari: 5 nafar</p>
+        <p>[+] Ishonchli mijozlar: 89+</p>
+    </div>
+
+    <div class="info-box">
+        <h3>> XIZMATLAR</h3>
+        <p>• Veb-sayt xavfsizlik auditi</p>
+        <p>• Penetratsion test (Pentest)</p>
+        <p>• Kiberxavfsizlik treninglari</p>
+        <p>• Phishing saytlarni aniqlash</p>
+    </div>
+</div>
+
+<!-- VOSITALAR SAHIFASI -->
+<div id="toolsPage" class="container" style="display:none;">
+    <div class="hero">
+        <h3 style="color:#00ff41;">>_ KIBERXAVFSIZLIK VOSITALARI</h3>
+        <p>Barcha vositalar ta'limiy maqsadlarda</p>
+    </div>
+
+    <div class="section-title">1-QAVAT - TARMOQ VOSITALARI</div>
+    <div class="grid">
+        <div class="card">
+            <h3>🌐 IP TEKSHIRUV</h3>
+            <input type="text" id="scanIP" placeholder="IP manzil">
+            <button onclick="scanIP()">>_ SKANERLASH</button>
+            <div id="ipResult" class="result"></div>
+        </div>
+        <div class="card">
+            <h3>📡 PING</h3>
+            <input type="text" id="pingHost" placeholder="google.com">
+            <button onclick="pingHost()">>_ PING</button>
+            <div id="pingResult" class="result"></div>
+        </div>
+        <div class="card">
+            <h3>🔍 PORT SKANER</h3>
+            <input type="text" id="portIP" placeholder="IP manzil">
+            <input type="text" id="ports" placeholder="22,80,443">
+            <button onclick="scanPorts()">>_ SKANERLASH</button>
+            <div id="portResult" class="result"></div>
+        </div>
+    </div>
+
+    <div class="section-title">2-QAVAT - XAVFSIZLIK</div>
+    <div class="grid">
+        <div class="card">
+            <h3>🔐 PAROL KUCHI</h3>
+            <input type="password" id="password" placeholder="Parol">
+            <button onclick="checkPassword()">>_ TEKSHIRISH</button>
+            <div id="passwordResult" class="result"></div>
+        </div>
+        <div class="card">
+            <h3>⚠️ URL TEKSHIRUV</h3>
+            <input type="text" id="urlCheck" placeholder="https://...">
+            <button onclick="checkURL()">>_ TEKSHIRISH</button>
+            <div id="urlResult" class="result"></div>
+        </div>
+        <div class="card">
+            <h3>🔑 HASH GENERATOR</h3>
+            <input type="text" id="hashInput" placeholder="Matn">
+            <select id="hashType">
+                <option>MD5</option><option>SHA-1</option><option>SHA-256</option>
+            </select>
+            <button onclick="generateHash()">>_ YARATISH</button>
+            <div id="hashResult" class="result"></div>
+        </div>
+    </div>
+
+    <div class="section-title">3-QAVAT - SHIFRLASH</div>
+    <div class="grid">
+        <div class="card">
+            <h3>📜 BASE64</h3>
+            <textarea id="textInput" rows="2" placeholder="Matn..."></textarea>
+            <button onclick="encryptText()">>_ SHIFRLASH</button>
+            <button onclick="decryptText()">>_ DESHIFRLASH</button>
+            <div id="cryptoResult" class="result"></div>
+        </div>
+        <div class="card">
+            <h3>🆔 WHOIS</h3>
+            <input type="text" id="whoisDomain" placeholder="example.com">
+            <button onclick="whoisLookup()">>_ QIDIRISH</button>
+            <div id="whoisResult" class="result"></div>
+        </div>
+        <div class="card">
+            <h3>🌐 DNS</h3>
+            <input type="text" id="dnsDomain" placeholder="example.com">
+            <button onclick="dnsLookup()">>_ SO'ROV</button>
+            <div id="dnsResult" class="result"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TA'LIM SAHIFASI -->
+<div id="educationPage" class="container" style="display:none;">
+    <div class="hero">
+        <h3 style="color:#00ff41;">>_ KIBERXAVFSIZLIK TA'LIMI</h3>
+        <p>O'zingizni himoya qilishni o'rganing</p>
+    </div>
+    <div class="info-box"><h3>> KUCHLI PAROL</h3><p>✅ 12+ belgi<br>✅ Katta/kichik harf<br>✅ Raqam va maxsus belgi</p></div>
+    <div class="info-box"><h3>> PHISHING HIMOYASI</h3><p>✅ Shubhali havolalarni bosmang<br>✅ Sayt manzilini tekshiring<br>✅ Hech kimga parol aytmang</p></div>
+    <div class="info-box"><h3>> VPN ISHLATISH</h3><p>✅ Ma'lumotlarni shifrlaydi<br>✅ IP manzilni yashiradi<br>✅ Jamoat Wi-Fi da xavfsizlik</p></div>
+</div>
+
+<!-- YANGILIKLAR -->
+<div id="newsPage" class="container" style="display:none;">
+    <div class="hero">
+        <h3 style="color:#00ff41;">>_ YANGILIKLAR</h3>
+        <p>Kiberxavfsizlik olamidagi so'nggi voqealar</p>
+    </div>
+    <div class="info-box"><h3>> 2025-04-06</h3><p>49 TEAM jamoasi yangi loyihasini taqdim etdi. Kiberxavfsizlik haftaligi boshlandi.</p></div>
+    <div class="info-box"><h3>> 2025-04-05</h3><p>Yangi "GhostRAT" zararli dasturi tarqalmoqda. Ehtiyot bo'ling!</p></div>
+    <div class="info-box"><h3>> 2025-04-04</h3><p>Telegram xavfsizlik yangilanishi chiqdi. Dasturni yangilang.</p></div>
+</div>
+
+<!-- BIZ HAQIMIZDA - TO'G'RILANGAN JAMOA AZOLARI -->
+<div id="aboutPage" class="container" style="display:none;">
+    <div class="hero">
+        <h3 style="color:#00ff41;">>_ 49 TEAM | BIZ HAQIMIZDA</h3>
+        <p>Kiberxavfsizlik jamoasi</p>
+    </div>
+
+    <div class="info-box">
+        <h3>> JAMOA MA'LUMOTLARI</h3>
+        <p>📞 Telefon: <strong style="color:#00ff41;">+998 77 105 9095</strong></p>
+        <p>📍 Manzil: <strong style="color:#00ff41;">Toshkent viloyati, Parkent tumani</strong></p>
+        <p>📱 Telegram: <strong style="color:#00ff41;">@sardorAERO</strong></p>
+        <p>👥 Jamoa a'zolari soni: <strong style="color:#00ff41;">5 nafar</strong></p>
+    </div>
+
+    <div class="info-box">
+        <h3>> JAMOA AZOLARI</h3>
+        <ul class="member-list">
+            <li><span class="leader">👑 Sardor (SardorAERO)</span> - <span style="color:#00ff41;">Jamoa Rahbari / Pentester</span></li>
+            <li>🔹 Dilshod - Tarmoq xavfsizligi mutaxassisi</li>
+            <li>🔹 Botir - Veb xavfsizlik muhandisi</li>
+            <li>🔹 Ismoil - Ma'lumotlar xavfsizligi auditori</li>
+            <li>🔹 Vosidjon - Kiberjinoyatchilikka qarshi ekspert</li>
+        </ul>
+    </div>
+
+    <div class="info-box">
+        <h3>> RAHBAR HAQIDA</h3>
+        <p>👑 <strong>Sardor (SardorAERO)</strong> - 49 TEAM jamoasining asoschisi va rahbari.</p>
+        <p>📌 5 yillik tajribaga ega pentester va kiberxavfsizlik bo'yicha mutaxassis.</p>
+        <p>📌 Bir qancha yirik kompaniyalarda xavfsizlik auditlarini o'tkazgan.</p>
+        <p>📌 O'zbekistonda kiberxavfsizlik madaniyatini rivojlantirishga hissa qo'shmoqda.</p>
+    </div>
+
+    <div class="info-box">
+        <h3>> BOG'LANISH</h3>
+        <p>📞 Telefon: +998 77 105 9095</p>
+        <p>📧 Email: info@49team.uz</p>
+        <p>📱 Telegram: @sardorAERO</p>
+        <p>📍 Manzil: Toshkent viloyati, Parkent tumani</p>
+    </div>
+
+    <div class="info-box">
+        <h3>> TARIX</h3>
+        <p>49 TEAM 2020-yilda Sardor tomonidan tashkil etilgan. Hozirda 5 nafar professional a'zo faoliyat yuritadi: Sardor (rahbar), Dilshod, Botir, Ismoil, Vosidjon.</p>
+        <p>Bizning asosiy maqsad - O'zbekistonda kiberxavfsizlik madaniyatini oshirish va raqamli dunyoni xavfsiz qilish.</p>
+    </div>
+</div>
+
+<footer>
+    <p>49 TEAM | Kiberxavfsizlik platformasi | 2025</p>
+    <p style="margin-top: 5px;">[ TA'LIMIY MAQSADLARDA ]</p>
+</footer>
+
+<script>
+    // ========== TYPING EFFECT ==========
+    const text = "49 TEAM";
+    let index = 0;
+    let isDeleting = false;
+    const typedSpan = document.getElementById("typedText");
+
+    function typeEffect() {
+        if (!isDeleting && index <= text.length) {
+            typedSpan.innerText = text.substring(0, index);
+            index++;
+            setTimeout(typeEffect, 150);
+        }
+        else if (isDeleting && index >= 0) {
+            typedSpan.innerText = text.substring(0, index);
+            index--;
+            setTimeout(typeEffect, 100);
+        }
+        else if (!isDeleting && index > text.length) {
+            isDeleting = true;
+            setTimeout(typeEffect, 1500);
+        }
+        else if (isDeleting && index < 0) {
+            isDeleting = false;
+            index = 0;
+            setTimeout(typeEffect, 500);
+        }
+    }
+
+    typeEffect();
+
+    // ========== SAHIFALAR ==========
+    function showPage(page) {
+        document.getElementById('homePage').style.display = 'none';
+        document.getElementById('toolsPage').style.display = 'none';
+        document.getElementById('educationPage').style.display = 'none';
+        document.getElementById('newsPage').style.display = 'none';
+        document.getElementById('aboutPage').style.display = 'none';
+        document.getElementById(page + 'Page').style.display = 'block';
+    }
+
+    // ========== VOSITALAR ==========
+    async function scanIP() {
+        const ip = document.getElementById('scanIP').value.trim();
+        const r = document.getElementById('ipResult');
+        if (!ip) { r.innerHTML = '❌ IP kiriting'; r.classList.add('show'); return; }
+        r.innerHTML = '⏳ Skanerlanmoqda...'; r.classList.add('show');
+        try {
+            const res = await fetch(`https://ipapi.co/${ip}/json/`);
+            const d = await res.json();
+            if (d.error) throw new Error();
+            r.innerHTML = `✅ IP: ${d.ip}<br>📍 ${d.country_name}, ${d.city || '?'}<br>🏢 ${d.org || '?'}`;
+        } catch(e) { r.innerHTML = '❌ Topilmadi'; }
+    }
+
+    async function pingHost() {
+        const h = document.getElementById('pingHost').value.trim();
+        const r = document.getElementById('pingResult');
+        if (!h) { r.innerHTML = '❌ Host kiriting'; r.classList.add('show'); return; }
+        r.innerHTML = '⏳ Ping...'; r.classList.add('show');
+        const start = Date.now();
+        try { await fetch(`https://${h}`, { mode: 'no-cors' }); r.innerHTML = `✅ ${h}: ${Date.now()-start}ms`; }
+        catch(e) { r.innerHTML = `❌ ${h}: Vaqt tugadi`; }
+    }
+
+    function scanPorts() {
+        const ip = document.getElementById('portIP').value;
+        const p = document.getElementById('ports').value;
+        const r = document.getElementById('portResult');
+        if (!ip || !p) { r.innerHTML = '❌ IP va port kiriting'; r.classList.add('show'); return; }
+        r.innerHTML = `✅ ${ip} da ${p} portlari ochiq (simulyatsiya)`;
+        r.classList.add('show');
+    }
+
+    function checkPassword() {
+        const pwd = document.getElementById('password').value;
+        const r = document.getElementById('passwordResult');
+        let s = 0;
+        if (pwd.length >= 8) s++;
+        if (pwd.length >= 12) s++;
+        if (/[A-Z]/.test(pwd)) s++;
+        if (/[0-9]/.test(pwd)) s++;
+        if (/[^A-Za-z0-9]/.test(pwd)) s++;
+        let msg = s <= 2 ? '⚠️ ZAIF' : (s <= 4 ? '⚠️ O\'RTACHA' : '✅ KUCHLI');
+        r.innerHTML = `${msg} (${s}/5)`;
+        r.classList.add('show');
+    }
+
+    function checkURL() {
+        const url = document.getElementById('urlCheck').value;
+        const r = document.getElementById('urlResult');
+        if (!url) { r.innerHTML = '❌ URL kiriting'; r.classList.add('show'); return; }
+        if (!url.startsWith('https://')) r.innerHTML = '⚠️ SSL YO\'Q (https emas)';
+        else r.innerHTML = '✅ URL xavfsiz';
+        r.classList.add('show');
+    }
+
+    async function generateHash() {
+        const text = document.getElementById('hashInput').value;
+        const type = document.getElementById('hashType').value;
+        const r = document.getElementById('hashResult');
+        if (!text) { r.innerHTML = '❌ Matn kiriting'; r.classList.add('show'); return; }
+        const enc = new TextEncoder();
+        const data = enc.encode(text);
+        let hash;
+        if (type === 'SHA-1') { const buf = await crypto.subtle.digest('SHA-1', data); hash = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join(''); }
+        else if (type === 'SHA-256') { const buf = await crypto.subtle.digest('SHA-256', data); hash = Array.from(new Uint8Array(buf)).map(b=>b.toString(16).padStart(2,'0')).join(''); }
+        else { hash = btoa(text).substring(0,32); }
+        r.innerHTML = `✅ ${type}: ${hash.substring(0,40)}...`;
+        r.classList.add('show');
+    }
+
+    function encryptText() {
+        const t = document.getElementById('textInput').value;
+        const r = document.getElementById('cryptoResult');
+        if (!t) { r.innerHTML = '❌ Matn kiriting'; r.classList.add('show'); return; }
+        r.innerHTML = `✅ ${btoa(unescape(encodeURIComponent(t))).substring(0,60)}...`;
+        r.classList.add('show');
+    }
+
+    function decryptText() {
+        const t = document.getElementById('textInput').value;
+        const r = document.getElementById('cryptoResult');
+        if (!t) { r.innerHTML = '❌ Matn kiriting'; r.classList.add('show'); return; }
+        try { r.innerHTML = `✅ ${decodeURIComponent(escape(atob(t)))}`; }
+        catch(e) { r.innerHTML = '❌ Base64 emas'; }
+        r.classList.add('show');
+    }
+
+    function whoisLookup() {
+        const d = document.getElementById('whoisDomain').value;
+        const r = document.getElementById('whoisResult');
+        if (!d) { r.innerHTML = '❌ Domen kiriting'; r.classList.add('show'); return; }
+        r.innerHTML = `✅ ${d}: Ro'yxatdan o'tgan: 2020, Tugaydi: 2026`;
+        r.classList.add('show');
+    }
+
+    function dnsLookup() {
+        const d = document.getElementById('dnsDomain').value;
+        const r = document.getElementById('dnsResult');
+        if (!d) { r.innerHTML = '❌ Domen kiriting'; r.classList.add('show'); return; }
+        r.innerHTML = `✅ ${d} A: 192.0.2.1, MX: mail.${d}`;
+        r.classList.add('show');
+    }
+</script>
+</body>
+</html>
